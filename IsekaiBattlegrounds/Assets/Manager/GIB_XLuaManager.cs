@@ -8,15 +8,15 @@ public class GIB_XLuaManager : GIB_IManager
         get { return "XLuaManager"; }
     }
 
-    private XLua.LuaEnv luaEnv { get; set; }
+    private XLua.LuaEnv _LuaEnv { get; set; }
 
     public void Initialize()
     {
-        luaEnv = new XLua.LuaEnv();
+        _LuaEnv = new XLua.LuaEnv();
     }
 
     public void Destroy()
     {
-        luaEnv.Dispose();
+        _LuaEnv.Dispose();
     }
 }

@@ -1,26 +1,49 @@
 using UnityEngine;
 
-public class GIB_ManagerHub : MonoBehaviour
+public class GIB_ManagerHub
 {
-    public GIB_TerrainCellManager TerrainCellManager { get; }
+    public GIB_EventManager EventManager { get; }
+    public GIB_TileManager TileManager { get; }
     public GIB_XLuaManager XLuaManager { get; }
+    public GIB_ModManager ModManager { get; }
 
-    public GIB_ManagerHub()
+    private static GIB_ManagerHub _Instance;
+
+    static public GIB_ManagerHub Instance
     {
-        TerrainCellManager = new GIB_TerrainCellManager();
-        XLuaManager = new GIB_XLuaManager();
+        get
+        {
+            if (_Instance == null)
+            {
+                _Instance = new GIB_ManagerHub();
+            }
+
+            return _Instance;
+        }
     }
 
-    private void Awake()
+    private GIB_ManagerHub()
     {
-        InitManager<GIB_TerrainCellManager>(TerrainCellManager);
+        EventManager = new GIB_EventManager();
+        TileManager = new GIB_TileManager();
+        XLuaManager = new GIB_XLuaManager();
+        ModManager = new GIB_ModManager();
+    }
+
+    public void Initialize()
+    {
+        InitManager<GIB_EventManager>(EventManager);
+        InitManager<GIB_ModManager>(ModManager);
+        InitManager<GIB_TileManager>(TileManager);
         InitManager<GIB_XLuaManager>(XLuaManager);
     }
 
-    private void OnDestroy()
+    public void Destroy()
     {
-        DestroyManager<GIB_TerrainCellManager>(TerrainCellManager);
         DestroyManager<GIB_XLuaManager>(XLuaManager);
+        DestroyManager<GIB_TileManager>(TileManager);
+        DestroyManager<GIB_ModManager>(ModManager);
+        DestroyManager<GIB_EventManager>(EventManager);
     }
 
     private void InitManager<T>(T Manager)

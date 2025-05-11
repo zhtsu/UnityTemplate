@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class GIB_Tile : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void UnitEntered(GIB_Unit Unit)
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UnitExited(GIB_Unit Unit)
     {
-        
+
     }
 }

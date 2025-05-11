@@ -1,10 +1,10 @@
 using System;
 
-public class GIB_TerrainCellManager : GIB_IManager
+public class GIB_ModManager : GIB_IManager
 {
     public string ManagerName
     {
-        get { return "TerrainCellManager"; }
+        get { return "ModManager"; }
     }
 
     public void Initialize()
