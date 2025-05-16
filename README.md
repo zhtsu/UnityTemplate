@@ -1,2 +1,2 @@
-# IsekaiBattlegrounds
-异世界战棋
+# FurryBattlegrounds
+福瑞战棋
