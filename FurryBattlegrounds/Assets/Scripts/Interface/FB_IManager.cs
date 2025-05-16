@@ -1,4 +1,4 @@
-public interface GIB_IManager
+public interface FB_IManager
 {
     string ManagerName { get; }
     void Initialize();

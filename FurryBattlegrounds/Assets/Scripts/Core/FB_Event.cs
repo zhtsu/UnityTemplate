@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GIB_Event
+public class FB_Event
 {
     private long _Id;
     private static long _IdCount = 0;
@@ -12,7 +12,7 @@ public class GIB_Event
         get { return _Id; }
     }
 
-    public GIB_Event()
+    public FB_Event()
     {
         _Id = ++_IdCount;
     }

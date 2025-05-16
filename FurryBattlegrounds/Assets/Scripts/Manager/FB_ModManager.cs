@@ -1,10 +1,10 @@
 using System;
 
-public class GIB_DataManager : GIB_IManager
+public class FB_ModManager : FB_IManager
 {
     public string ManagerName
     {
-        get { return "DataManager"; }
+        get { return "ModManager"; }
     }
 
     public void Initialize()

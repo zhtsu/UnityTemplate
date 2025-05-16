@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using static Unity.Collections.AllocatorManager;
 
-public class GIB_EventManager : GIB_IManager
+public class FB_EventManager : FB_IManager
 {
     public string ManagerName
     {
@@ -24,7 +24,7 @@ public class GIB_EventManager : GIB_IManager
     }
 
     public void SendEvent<T>(T Event)
-        where T : GIB_Event
+        where T : FB_Event
     {
         Type EventType = typeof(T);
 

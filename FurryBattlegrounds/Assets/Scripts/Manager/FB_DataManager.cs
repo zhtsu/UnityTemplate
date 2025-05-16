@@ -1,10 +1,10 @@
 using System;
 
-public class GIB_TileManager : GIB_IManager
+public class FB_DataManager : FB_IManager
 {
     public string ManagerName
     {
-        get { return "TileManager"; }
+        get { return "DataManager"; }
     }
 
     public void Initialize()

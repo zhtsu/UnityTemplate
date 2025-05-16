@@ -1,7 +1,7 @@
 using System;
 using XLua;
 
-public class GIB_XLuaManager : GIB_IManager
+public class FB_XLuaManager : FB_IManager
 {
     public string ManagerName
     {

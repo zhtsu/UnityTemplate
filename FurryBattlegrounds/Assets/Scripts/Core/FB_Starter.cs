@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GIB_Starter : MonoBehaviour
+public class FB_Starter : MonoBehaviour
 {
     private void Start()
     {
         DontDestroyOnLoad(this);
 
-        GIB_ManagerHub.Instance.Initialize();
+        FB_ManagerHub.Instance.Initialize();
     }
 
     private void OnDestroy()
     {
-        GIB_ManagerHub.Instance.Destroy();
+        FB_ManagerHub.Instance.Destroy();
     }
 }
