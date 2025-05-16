@@ -6,6 +6,7 @@ public class GIB_ManagerHub
     public GIB_TileManager TileManager { get; }
     public GIB_XLuaManager XLuaManager { get; }
     public GIB_ModManager ModManager { get; }
+    public GIB_DataManager DataManager { get; }
 
     private static GIB_ManagerHub _Instance;
 
@@ -28,6 +29,7 @@ public class GIB_ManagerHub
         TileManager = new GIB_TileManager();
         XLuaManager = new GIB_XLuaManager();
         ModManager = new GIB_ModManager();
+        DataManager = new GIB_DataManager();
     }
 
     public void Initialize()
@@ -36,6 +38,7 @@ public class GIB_ManagerHub
         InitManager<GIB_ModManager>(ModManager);
         InitManager<GIB_TileManager>(TileManager);
         InitManager<GIB_XLuaManager>(XLuaManager);
+        InitManager<GIB_DataManager>(DataManager);
     }
 
     public void Destroy()
@@ -44,6 +47,7 @@ public class GIB_ManagerHub
         DestroyManager<GIB_TileManager>(TileManager);
         DestroyManager<GIB_ModManager>(ModManager);
         DestroyManager<GIB_EventManager>(EventManager);
+        DestroyManager<GIB_DataManager>(DataManager);
     }
 
     private void InitManager<T>(T Manager)
