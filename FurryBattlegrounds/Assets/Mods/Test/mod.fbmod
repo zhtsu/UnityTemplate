@@ -1,0 +1,15 @@
+return {
+    name = "test_mod_name",
+    description = "test_mod_description",
+    author = "zhtsu",
+    email = "zhtsu@qq.com",
+    tile_list = {
+
+    },
+    unit_list = {
+        
+    },
+    locale_list = {
+        "locale.fblang"
+    }
+}

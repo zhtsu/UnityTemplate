@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//[CreateAssetMenu(fileName = "NewTileData", menuName = "FB Data/TileData")]
-public class FB_TileData : FB_IData
+//[CreateAssetMenu(fileName = "NewUnitData", menuName = "FB Data/UnitData")]
+public class FB_UnitData : FB_IData
 {
     public string Serialize()
     {
@@ -12,7 +12,6 @@ public class FB_TileData : FB_IData
 
     public bool Deserialize(string LuaCode)
     {
-
 
         return true;
     }

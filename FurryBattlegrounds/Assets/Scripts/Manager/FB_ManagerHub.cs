@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class FB_ManagerHub
 {
-    public FB_EventManager EventManager { get; }
-    public FB_TileManager TileManager { get; }
-    public FB_XLuaManager XLuaManager { get; }
-    public FB_ModManager ModManager { get; }
-    public FB_DataManager DataManager { get; }
+    public FB_EventManager EventManager { get; private set; }
+    public FB_TileManager TileManager { get; private set; }
+    public FB_XLuaManager XLuaManager { get; private set; }
+    public FB_ModManager ModManager { get; private set; }
+    public FB_DataManager DataManager { get; private set; }
 
     private static FB_ManagerHub _Instance;
 
@@ -23,17 +23,14 @@ public class FB_ManagerHub
         }
     }
 
-    private FB_ManagerHub()
+    public void Initialize()
     {
         EventManager = new FB_EventManager();
         TileManager = new FB_TileManager();
         XLuaManager = new FB_XLuaManager();
         ModManager = new FB_ModManager();
         DataManager = new FB_DataManager();
-    }
 
-    public void Initialize()
-    {
         InitManager<FB_EventManager>(EventManager);
         InitManager<FB_ModManager>(ModManager);
         InitManager<FB_TileManager>(TileManager);

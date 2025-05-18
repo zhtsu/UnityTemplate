@@ -1,0 +1,15 @@
+return {
+    id = "example",
+    name = "tile_example_name",
+    description = "tile_example_description",
+    width = 128,
+    height = 128,
+    animations = {
+        idle = {
+            type = "sprite"
+            keyframes = {
+                "tiles/example/textures/green.png"
+            }
+        }
+    }
+}
