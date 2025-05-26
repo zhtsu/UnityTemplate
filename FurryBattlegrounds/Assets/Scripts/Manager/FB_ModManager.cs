@@ -48,7 +48,7 @@ public class FB_ModManager : FB_IManager
 
                 _ModDataList.Add(ModData);
 
-                Debug.Log(GetLocaleString(ModData.Id, "en", ModData.Name));
+                Debug.Log(GetLocaleString(ModData.Id, "en", ModData.Description));
             }
             catch (System.Exception Err)
             {

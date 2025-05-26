@@ -1,5 +1,5 @@
 return {
-    cn = {
+    zh = {
         test_mod_name = "测试",
         test_mod_description = "这是一条测试用的模组简介"
     },
