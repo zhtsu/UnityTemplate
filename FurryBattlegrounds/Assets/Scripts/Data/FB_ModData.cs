@@ -25,16 +25,14 @@ public class FB_ModData : FB_IData
             return false;
         }
 
-        Name = FB_ManagerHub.Instance.XLuaManager.GetLuaValue<string>(ModDataLua, "name");
-        Description = FB_ManagerHub.Instance.XLuaManager.GetLuaValue<string>(ModDataLua, "description");
-        Author = FB_ManagerHub.Instance.XLuaManager.GetLuaValue<string>(ModDataLua, "author");
-        Email = FB_ManagerHub.Instance.XLuaManager.GetLuaValue<string>(ModDataLua, "email");
+        Name = FB_ManagerHub.Instance.XLuaManager.GetLuaValue<string, string>(ModDataLua, "name");
+        Description = FB_ManagerHub.Instance.XLuaManager.GetLuaValue<string, string>(ModDataLua, "description");
+        Author = FB_ManagerHub.Instance.XLuaManager.GetLuaValue<string, string>(ModDataLua, "author");
+        Email = FB_ManagerHub.Instance.XLuaManager.GetLuaValue<string, string>(ModDataLua, "email");
 
         TileList = FB_ManagerHub.Instance.XLuaManager.GetLuaArray<string>(ModDataLua, "tile_list");
         UnitList = FB_ManagerHub.Instance.XLuaManager.GetLuaArray<string>(ModDataLua, "unit_list");
         LocaleList = FB_ManagerHub.Instance.XLuaManager.GetLuaArray<string>(ModDataLua, "locale_list");
-
-        Debug.Log(Email);
 
         return true;
     }

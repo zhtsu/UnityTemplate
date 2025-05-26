@@ -31,10 +31,10 @@ public class FB_ManagerHub
         ModManager = new FB_ModManager();
         DataManager = new FB_DataManager();
 
+        InitManager<FB_XLuaManager>(XLuaManager);
         InitManager<FB_EventManager>(EventManager);
         InitManager<FB_ModManager>(ModManager);
         InitManager<FB_TileManager>(TileManager);
-        InitManager<FB_XLuaManager>(XLuaManager);
         InitManager<FB_DataManager>(DataManager);
     }
 

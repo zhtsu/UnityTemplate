@@ -1,7 +1,6 @@
-using System;
+using UnityEngine;
 using System.Collections.Generic;
 using XLua;
-using XLua.Cast;
 
 public class FB_XLuaManager : FB_IManager
 {
@@ -24,27 +23,57 @@ public class FB_XLuaManager : FB_IManager
 
     public LuaTable GetLuaTable(string LuaCode)
     {
-        return _LuaEnv.DoString(LuaCode)[0] as LuaTable;
+        try
+        {
+            return _LuaEnv.DoString(LuaCode)[0] as LuaTable;
+        }
+        catch (System.Exception Err)
+        {
+            Debug.LogError($"Fail to get lua table\n" +
+                $"Error: {Err.Message}");
+        }
+
+        return null;
     }
 
-    public T GetLuaValue<T>(LuaTable Table, string Key)
+    public T GetLuaValue<K, T>(LuaTable Table, K Key)
     {
-        return Table.Get<string, T>(Key);
+        try
+        {
+            return Table.Get<K, T>(Key);
+        }
+        catch (System.Exception Err)
+        {
+            Debug.LogError($"Fail to get lua value\n" +
+                $"Type: {typeof(T)} Key: {Key} Error: {Err.Message}");
+        }
+
+        return default(T);
     }
 
     public T[] GetLuaArray<T>(LuaTable Table, string Key)
     {
-        object LuaObj = Table.Get<object>(Key);
-        if (!(LuaObj is LuaTable LuaList))
-            return new T[0];
-
-        List<T> ValueList = new List<T>();
-        foreach (int K in LuaList.GetKeys())
+        try
         {
-            T Val = LuaList.Get<int, T>(K);
-            ValueList.Add(Val);
+            object LuaObj = Table.Get<object>(Key);
+            if (!(LuaObj is LuaTable LuaList))
+                return new T[0];
+
+            List<T> ValueList = new List<T>();
+            foreach (int K in LuaList.GetKeys<int>())
+            {
+                T Val = GetLuaValue<int, T>(LuaList, K);
+                ValueList.Add(Val);
+            }
+
+            return ValueList.ToArray();
+        }
+        catch (System.Exception Err)
+        {
+            Debug.LogError($"Fail to get lua array\n" +
+                $"Type: {typeof(T)} Key: {Key} Error: {Err.Message}");
         }
 
-        return ValueList.ToArray();
+        return new T[0];
     }
 }

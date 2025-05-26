@@ -10,7 +10,7 @@ public class FB_ModManager : FB_IManager
         get { return "ModManager"; }
     }
 
-    private List<FB_ModData> _ModDataList;
+    private List<FB_ModData> _ModDataList = new List<FB_ModData>();
 
     public void Initialize()
     {
@@ -39,7 +39,7 @@ public class FB_ModManager : FB_IManager
             }
             catch (System.Exception Err)
             {
-                Debug.LogError($"Fail to deserialize {ModFilePath}\n Error: {Err.Message}");
+                Debug.LogError($"Fail to read {ModFilePath}\n Error: {Err.Message}");
             }
         }
     }
