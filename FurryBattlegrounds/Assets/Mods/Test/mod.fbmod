@@ -1,4 +1,5 @@
 return {
+    id = "test",
     name = "test_mod_name",
     description = "test_mod_description",
     author = "zhtsu",
@@ -10,6 +11,6 @@ return {
         
     },
     locale_list = {
-        "locale.fblang"
+        "Test/locale.fblang"
     }
 }

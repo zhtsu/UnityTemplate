@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 using XLua;
 
 public class FB_ModData : FB_IData
 {
+    public string Id { get; private set; }
     public string Name { get; private set; }
     public string Description { get; private set; }
     public string Author { get; private set; }
@@ -25,6 +27,7 @@ public class FB_ModData : FB_IData
             return false;
         }
 
+        Id = FB_ManagerHub.Instance.XLuaManager.GetLuaValue<string, string>(ModDataLua, "id");
         Name = FB_ManagerHub.Instance.XLuaManager.GetLuaValue<string, string>(ModDataLua, "name");
         Description = FB_ManagerHub.Instance.XLuaManager.GetLuaValue<string, string>(ModDataLua, "description");
         Author = FB_ManagerHub.Instance.XLuaManager.GetLuaValue<string, string>(ModDataLua, "author");
