@@ -6,7 +6,7 @@ public class FB_ManagerHub
     public FB_TileManager TileManager { get; private set; }
     public FB_XLuaManager XLuaManager { get; private set; }
     public FB_ModManager ModManager { get; private set; }
-    public FB_DataManager DataManager { get; private set; }
+    public FB_LocaleManager LocaleManager { get; private set; }
 
     private static FB_ManagerHub _Instance;
 
@@ -29,13 +29,18 @@ public class FB_ManagerHub
         TileManager = new FB_TileManager();
         XLuaManager = new FB_XLuaManager();
         ModManager = new FB_ModManager();
-        DataManager = new FB_DataManager();
+        LocaleManager = new FB_LocaleManager();
 
+        // First
         InitManager<FB_XLuaManager>(XLuaManager);
         InitManager<FB_EventManager>(EventManager);
+
+        // Second
+        InitManager<FB_LocaleManager>(LocaleManager);
         InitManager<FB_ModManager>(ModManager);
+
+        // Third
         InitManager<FB_TileManager>(TileManager);
-        InitManager<FB_DataManager>(DataManager);
     }
 
     public void Destroy()
@@ -44,7 +49,7 @@ public class FB_ManagerHub
         DestroyManager<FB_TileManager>(TileManager);
         DestroyManager<FB_ModManager>(ModManager);
         DestroyManager<FB_EventManager>(EventManager);
-        DestroyManager<FB_DataManager>(DataManager);
+        DestroyManager<FB_LocaleManager>(LocaleManager);
     }
 
     private void InitManager<T>(T Manager)
