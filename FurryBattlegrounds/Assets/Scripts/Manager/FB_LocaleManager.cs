@@ -20,7 +20,7 @@ public class FB_LocaleManager : FB_IManager
 
     public void Destroy()
     {
-
+        FB_ManagerHub.Instance.EventManager.Unsubscribe<FB_ReadLocaleFileEvent>(LoadLocaleData);
     }
 
     public string GetString(string Namespace, string LanguageCode, string StringId)
@@ -65,7 +65,7 @@ public class FB_LocaleManager : FB_IManager
         try
         {
             string LocaleFileContent = File.ReadAllText(Event.LocaleFilePath, System.Text.Encoding.UTF8);
-            LuaTable LanguageDictLua = FB_ManagerHub.Instance.XLuaManager.GetLuaTable(LocaleFileContent);
+            LuaTable LanguageDictLua = FB_ManagerHub.Instance.XLuaManager.ReturnLuaTable(LocaleFileContent);
 
             foreach (string LanguageCode in LanguageDictLua.GetKeys<string>())
             {

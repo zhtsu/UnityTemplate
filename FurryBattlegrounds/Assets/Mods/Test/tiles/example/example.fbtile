@@ -6,9 +6,9 @@ return {
     height = 128,
     animations = {
         idle = {
-            type = "sprite"
+            type = "sprite",
             keyframes = {
-                "tiles/example/textures/green.png"
+                "Test/tiles/example/textures/green.png"
             }
         }
     }

@@ -5,7 +5,7 @@ return {
     author = "zhtsu",
     email = "zhtsu@qq.com",
     tile_list = {
-
+        "Test/tiles/example/example.fbtile"
     },
     unit_list = {
         

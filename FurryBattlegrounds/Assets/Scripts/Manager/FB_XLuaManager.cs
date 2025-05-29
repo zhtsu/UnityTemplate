@@ -21,7 +21,7 @@ public class FB_XLuaManager : FB_IManager
         _LuaEnv.Dispose();
     }
 
-    public LuaTable GetLuaTable(string LuaCode)
+    public LuaTable ReturnLuaTable(string LuaCode)
     {
         try
         {

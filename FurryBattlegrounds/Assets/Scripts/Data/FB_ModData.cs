@@ -20,10 +20,10 @@ public class FB_ModData : FB_IData
 
     public bool Deserialize(string LuaCode)
     {
-        LuaTable ModDataLua = FB_ManagerHub.Instance.XLuaManager.GetLuaTable(LuaCode);
+        LuaTable ModDataLua = FB_ManagerHub.Instance.XLuaManager.ReturnLuaTable(LuaCode);
         if (ModDataLua == null)
         {
-            Debug.Log($"Fail to deserialize lua code: ${LuaCode}");
+            Debug.Log($"Fail to deserialize mod data: ${LuaCode}");
             return false;
         }
 

@@ -7,6 +7,7 @@ public class FB_ManagerHub
     public FB_XLuaManager XLuaManager { get; private set; }
     public FB_ModManager ModManager { get; private set; }
     public FB_LocaleManager LocaleManager { get; private set; }
+    public FB_PathManager PathManager { get; private set; }
 
     private static FB_ManagerHub _Instance;
 
@@ -30,26 +31,34 @@ public class FB_ManagerHub
         XLuaManager = new FB_XLuaManager();
         ModManager = new FB_ModManager();
         LocaleManager = new FB_LocaleManager();
+        PathManager = new FB_PathManager();
 
-        // First
-        InitManager<FB_XLuaManager>(XLuaManager);
+        // First initialize
+        InitManager<FB_PathManager>(PathManager);
         InitManager<FB_EventManager>(EventManager);
+        InitManager<FB_XLuaManager>(XLuaManager);
 
-        // Second
+        // Second initialize
         InitManager<FB_LocaleManager>(LocaleManager);
-        InitManager<FB_ModManager>(ModManager);
-
-        // Third
         InitManager<FB_TileManager>(TileManager);
+
+        // Third initialize
+        InitManager<FB_ModManager>(ModManager);
     }
 
     public void Destroy()
     {
-        DestroyManager<FB_XLuaManager>(XLuaManager);
-        DestroyManager<FB_TileManager>(TileManager);
-        DestroyManager<FB_ModManager>(ModManager);
-        DestroyManager<FB_EventManager>(EventManager);
+        // First destroy
         DestroyManager<FB_LocaleManager>(LocaleManager);
+        DestroyManager<FB_TileManager>(TileManager);
+
+        // Second destroy
+        DestroyManager<FB_ModManager>(ModManager);
+        DestroyManager<FB_PathManager>(PathManager);
+        DestroyManager<FB_XLuaManager>(XLuaManager);
+
+        // Third destroy
+        DestroyManager<FB_EventManager>(EventManager);
     }
 
     private void InitManager<T>(T Manager)
