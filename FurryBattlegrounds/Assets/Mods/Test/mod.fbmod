@@ -1,16 +1,16 @@
-return {
-    id = "test",
-    name = "test_mod_name",
-    description = "test_mod_description",
-    author = "zhtsu",
-    email = "zhtsu@qq.com",
-    tile_list = {
-        "Test/tiles/example/example.fbtile"
-    },
-    unit_list = {
+{
+    "Id": "test",
+    "Name": "test_mod_name",
+    "Description": "test_mod_description",
+    "Author": "zhtsu",
+    "Email": "zhtsu@qq.com",
+    "TileList": [
+        "Test/tiles/example.fbtile"
+    ],
+    "UnitList": [
         
-    },
-    locale_list = {
+    ],
+    "LocaleList": [
         "Test/locale.fblang"
-    }
+    ]
 }

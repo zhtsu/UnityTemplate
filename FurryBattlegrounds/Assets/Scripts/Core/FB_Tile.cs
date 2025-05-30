@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FB_Tile : MonoBehaviour, FB_IModable<FB_TileData>
+public class FB_Tile : MonoBehaviour
 {
     public void UnitEntered(FB_Unit Unit)
     {

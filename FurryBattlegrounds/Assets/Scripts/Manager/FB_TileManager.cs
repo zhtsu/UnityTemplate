@@ -49,19 +49,17 @@ public class FB_TileManager : FB_IManager
         try
         {
             string TileFileContent = File.ReadAllText(Event.TileFilePath, System.Text.Encoding.UTF8);
-            LuaTable TileDataLua = FB_ManagerHub.Instance.XLuaManager.ReturnLuaTable(TileFileContent);
 
-            FB_TileData TileData = new FB_TileData();
-            TileData.Initialize(Event.BelongingModId);
-            TileData.Deserialize(TileFileContent);
+            if (FB_Data.Deserialize<FB_TileData>(TileFileContent, out FB_TileData TileData))
+            {
+                if (HasTileData(TileData.BelongingModId, TileData.Id))
+                {
+                    Debug.LogWarning("Repeated tile id");
+                    return;
+                }
 
-            if (HasTileData(TileData.BelongingModId, TileData.Id))
-            {
-                Debug.LogWarning("Repeated tile id");
-                return;
-            }
-            else
-            {
+                TileData.Initialize(Event.BelongingModId);
+
                 _TileDataList.Add(TileData);
             }
         }

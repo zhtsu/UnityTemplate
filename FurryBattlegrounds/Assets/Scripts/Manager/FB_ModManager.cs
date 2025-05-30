@@ -26,9 +26,10 @@ public class FB_ModManager : FB_IManager
             {
                 string ModFileContent = File.ReadAllText(ModFilePath, System.Text.Encoding.UTF8);
 
-                FB_ModData ModData = new FB_ModData();
-                ModData.Deserialize(ModFileContent);
-                _ModDataList.Add(ModData);
+                if (FB_Data.Deserialize<FB_ModData>(ModFileContent, out FB_ModData ModData))
+                {
+                    _ModDataList.Add(ModData);
+                }
 
                 // Load data by sending event
                 foreach (string LocaleFile in ModData.LocaleList)
