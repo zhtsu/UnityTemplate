@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FB_Starter : MonoBehaviour
+public class FB_LifeCycleController : MonoBehaviour
 {
     private void Start()
     {

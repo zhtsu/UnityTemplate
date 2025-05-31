@@ -27,13 +27,13 @@ public class FB_TileManager : FB_IManager
         return _TileDataList.FindAll(TileData => TileData.BelongingModId == ModId).ToArray();
     }
 
-    public FB_TileData GetTileData(string ModId, string TileId)
+    private FB_TileData GetTileData(string ModId, string TileId)
     {
         return _TileDataList.Find(
             TileData => TileData.BelongingModId == ModId && TileData.Id == TileId);
     }
 
-    public bool HasTileData(string ModId, string TileId)
+    private bool HasTileData(string ModId, string TileId)
     {
         return GetTileData(ModId, TileId) != null;
     }

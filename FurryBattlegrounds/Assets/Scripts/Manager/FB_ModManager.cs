@@ -43,6 +43,12 @@ public class FB_ModManager : FB_IManager
                     FB_ReadTileFileEvent RTFE = new FB_ReadTileFileEvent(ModData.Id, FB_PathManager.GenerateModFilePath(TileFile));
                     FB_ManagerHub.Instance.EventManager.SendEvent<FB_ReadTileFileEvent>(RTFE);
                 }
+
+                foreach (string UnitFile in ModData.UnitList)
+                {
+                    FB_ReadUnitFileEvent RUFE = new FB_ReadUnitFileEvent(ModData.Id, FB_PathManager.GenerateModFilePath(UnitFile));
+                    FB_ManagerHub.Instance.EventManager.SendEvent<FB_ReadUnitFileEvent>(RUFE);
+                }
             }
             catch (System.Exception Err)
             {
