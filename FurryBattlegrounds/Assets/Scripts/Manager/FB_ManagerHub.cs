@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FB_ManagerHub
 {
-    public FB_EventManager EventManager { get; private set; }
+    //public FB_EventManager EventManager { get; private set; }
     public FB_TileManager TileManager { get; private set; }
     public FB_UnitManager UnitManager { get; private set; }
     public FB_XLuaManager XLuaManager { get; private set; }
@@ -28,7 +28,7 @@ public class FB_ManagerHub
 
     public void Initialize()
     {
-        EventManager = new FB_EventManager();
+        //EventManager = new FB_EventManager();
         TileManager = new FB_TileManager();
         UnitManager = new FB_UnitManager();
         XLuaManager = new FB_XLuaManager();
@@ -40,7 +40,7 @@ public class FB_ManagerHub
         // First initialize
         InitManager<FB_PrefabManager>(PrefabManager);
         InitManager<FB_PathManager>(PathManager);
-        InitManager<FB_EventManager>(EventManager);
+        //InitManager<FB_EventManager>(EventManager);
         InitManager<FB_XLuaManager>(XLuaManager);
 
         // Second initialize
@@ -65,7 +65,7 @@ public class FB_ManagerHub
         DestroyManager<FB_XLuaManager>(XLuaManager);
 
         // Third destroy
-        DestroyManager<FB_EventManager>(EventManager);
+        //DestroyManager<FB_EventManager>(EventManager);
         DestroyManager<FB_PrefabManager>(PrefabManager);
     }
 

@@ -11,7 +11,7 @@ public class FB_EventManager : FB_IManager
 
     public delegate void EventHandler<T>(T Event);
 
-    private Dictionary<Type, Delegate> _EventHandlers = new Dictionary<Type, Delegate>();
+    private static Dictionary<Type, Delegate> _EventHandlers = new Dictionary<Type, Delegate>();
 
     public void Initialize()
     {
@@ -23,7 +23,7 @@ public class FB_EventManager : FB_IManager
 
     }
 
-    public void SendEvent<T>(T Event)
+    public static void SendEvent<T>(T Event = default)
         where T : FB_Event
     {
         Type EventType = typeof(T);
@@ -34,7 +34,7 @@ public class FB_EventManager : FB_IManager
         }
     }
 
-    public void Subscribe<T>(EventHandler<T> Handler)
+    public static void Subscribe<T>(EventHandler<T> Handler)
     {
         Type EventType = typeof(T);
 
@@ -48,7 +48,7 @@ public class FB_EventManager : FB_IManager
         }
     }
 
-    public void Unsubscribe<T>(EventHandler<T> Handler)
+    public static void Unsubscribe<T>(EventHandler<T> Handler)
     {
         Type EventType = typeof(T);
 

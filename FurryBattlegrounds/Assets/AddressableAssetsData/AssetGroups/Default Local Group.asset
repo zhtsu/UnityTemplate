@@ -16,7 +16,13 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 6bea7cb18abc40d499ca50c36b70f764
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 7ed20e97e7a0da64d85a551239f2c01e
+    m_Address: Assets/Prefabs/SquareTile.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 13bee99359e3bf54e897c31cc6270303, type: 2}
   m_SchemaSet:

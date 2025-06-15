@@ -14,12 +14,12 @@ public class FB_TileManager : FB_IManager
 
     public void Initialize()
     {
-        FB_ManagerHub.Instance.EventManager.Subscribe<FB_ReadTileFileEvent>(LoadTileData);
+        FB_EventManager.Subscribe<FB_ReadTileFileEvent>(LoadTileData);
     }
 
     public void Destroy()
     {
-        FB_ManagerHub.Instance.EventManager.Unsubscribe<FB_ReadTileFileEvent>(LoadTileData);
+        FB_EventManager.Unsubscribe<FB_ReadTileFileEvent>(LoadTileData);
     }
 
     public FB_TileData[] GetTileDataList(string ModId)

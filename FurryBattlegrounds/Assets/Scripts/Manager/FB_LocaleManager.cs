@@ -16,12 +16,12 @@ public class FB_LocaleManager : FB_IManager
 
     public void Initialize()
     {
-        FB_ManagerHub.Instance.EventManager.Subscribe<FB_ReadLocaleFileEvent>(LoadLocaleData);
+        FB_EventManager.Subscribe<FB_ReadLocaleFileEvent>(LoadLocaleData);
     }
 
     public void Destroy()
     {
-        FB_ManagerHub.Instance.EventManager.Unsubscribe<FB_ReadLocaleFileEvent>(LoadLocaleData);
+        FB_EventManager.Unsubscribe<FB_ReadLocaleFileEvent>(LoadLocaleData);
         _LocaleStringDict.Clear();
     }
 

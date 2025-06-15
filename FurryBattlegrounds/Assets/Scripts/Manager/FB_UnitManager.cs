@@ -14,12 +14,12 @@ public class FB_UnitManager : FB_IManager
 
     public void Initialize()
     {
-        FB_ManagerHub.Instance.EventManager.Subscribe<FB_ReadUnitFileEvent>(LoadUnitData);
+        FB_EventManager.Subscribe<FB_ReadUnitFileEvent>(LoadUnitData);
     }
 
     public void Destroy()
     {
-        FB_ManagerHub.Instance.EventManager.Unsubscribe<FB_ReadUnitFileEvent>(LoadUnitData);
+        FB_EventManager.Unsubscribe<FB_ReadUnitFileEvent>(LoadUnitData);
     }
 
     private FB_UnitData GetUnitData(string ModId, string TileId)
