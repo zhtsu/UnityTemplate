@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class FB_LifeCycleController : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject UIManagerPrefab;
+
     private void Start()
     {
         DontDestroyOnLoad(this);
+
+        if (UIManagerPrefab)
+        {
+            Instantiate(UIManagerPrefab);
+        }
 
         FB_ManagerHub.Instance.Initialize();
     }

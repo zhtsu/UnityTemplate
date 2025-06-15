@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FB_ReadUnitFileEvent : FB_Event
+public class FB_Event_ReadUnitFile : FB_Event
 {
-    public FB_ReadUnitFileEvent(string InModId, string InUnitFilePath)
+    public FB_Event_ReadUnitFile(string InModId, string InUnitFilePath)
     {
         BelongingModId = InModId;
         UnitFilePath = InUnitFilePath;

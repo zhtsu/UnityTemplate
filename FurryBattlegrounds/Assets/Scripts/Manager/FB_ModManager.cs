@@ -34,20 +34,20 @@ public class FB_ModManager : FB_IManager
                 // Load data by sending event
                 foreach (string LocaleFile in ModData.LocaleList)
                 {
-                    FB_ReadLocaleFileEvent RLFE = new FB_ReadLocaleFileEvent(ModData.Id, FB_PathManager.GenerateModFilePath(LocaleFile));
-                    FB_EventManager.SendEvent<FB_ReadLocaleFileEvent>(RLFE);
+                    FB_Event_ReadLocaleFile RLFE = new FB_Event_ReadLocaleFile(ModData.Id, FB_PathManager.GenerateModFilePath(LocaleFile));
+                    FB_EventManager.SendEvent<FB_Event_ReadLocaleFile>(RLFE);
                 }
 
                 foreach (string TileFile in ModData.TileList)
                 {
-                    FB_ReadTileFileEvent RTFE = new FB_ReadTileFileEvent(ModData.Id, FB_PathManager.GenerateModFilePath(TileFile));
-                    FB_EventManager.SendEvent<FB_ReadTileFileEvent>(RTFE);
+                    FB_Event_ReadTileFile RTFE = new FB_Event_ReadTileFile(ModData.Id, FB_PathManager.GenerateModFilePath(TileFile));
+                    FB_EventManager.SendEvent<FB_Event_ReadTileFile>(RTFE);
                 }
 
                 foreach (string UnitFile in ModData.UnitList)
                 {
-                    FB_ReadUnitFileEvent RUFE = new FB_ReadUnitFileEvent(ModData.Id, FB_PathManager.GenerateModFilePath(UnitFile));
-                    FB_EventManager.SendEvent<FB_ReadUnitFileEvent>(RUFE);
+                    FB_Event_ReadUnitFile RUFE = new FB_Event_ReadUnitFile(ModData.Id, FB_PathManager.GenerateModFilePath(UnitFile));
+                    FB_EventManager.SendEvent<FB_Event_ReadUnitFile>(RUFE);
                 }
             }
             catch (System.Exception Err)

@@ -14,12 +14,12 @@ public class FB_UnitManager : FB_IManager
 
     public void Initialize()
     {
-        FB_EventManager.Subscribe<FB_ReadUnitFileEvent>(LoadUnitData);
+        FB_EventManager.Subscribe<FB_Event_ReadUnitFile>(LoadUnitData);
     }
 
     public void Destroy()
     {
-        FB_EventManager.Unsubscribe<FB_ReadUnitFileEvent>(LoadUnitData);
+        FB_EventManager.Unsubscribe<FB_Event_ReadUnitFile>(LoadUnitData);
     }
 
     private FB_UnitData GetUnitData(string ModId, string TileId)
@@ -33,7 +33,7 @@ public class FB_UnitManager : FB_IManager
         return GetUnitData(ModId, TileId) != null;
     }
 
-    private void LoadUnitData(FB_ReadUnitFileEvent Event)
+    private void LoadUnitData(FB_Event_ReadUnitFile Event)
     {
         if (!File.Exists(Event.UnitFilePath))
         {

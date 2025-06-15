@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FB_ReadTileFileEvent : FB_Event
+public class FB_Event_ReadTileFile : FB_Event
 {
-    public FB_ReadTileFileEvent(string InModId, string InTileFilePath)
+    public FB_Event_ReadTileFile(string InModId, string InTileFilePath)
     {
         BelongingModId = InModId;
         TileFilePath = InTileFilePath;

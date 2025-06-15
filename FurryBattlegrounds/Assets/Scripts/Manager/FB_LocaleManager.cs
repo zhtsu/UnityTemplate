@@ -16,12 +16,12 @@ public class FB_LocaleManager : FB_IManager
 
     public void Initialize()
     {
-        FB_EventManager.Subscribe<FB_ReadLocaleFileEvent>(LoadLocaleData);
+        FB_EventManager.Subscribe<FB_Event_ReadLocaleFile>(LoadLocaleData);
     }
 
     public void Destroy()
     {
-        FB_EventManager.Unsubscribe<FB_ReadLocaleFileEvent>(LoadLocaleData);
+        FB_EventManager.Unsubscribe<FB_Event_ReadLocaleFile>(LoadLocaleData);
         _LocaleStringDict.Clear();
     }
 
@@ -51,7 +51,7 @@ public class FB_LocaleManager : FB_IManager
         }
     }
 
-    private void LoadLocaleData(FB_ReadLocaleFileEvent Event)
+    private void LoadLocaleData(FB_Event_ReadLocaleFile Event)
     {
         if (_LocaleStringDict.ContainsKey(Event.Namespace) == false)
         {

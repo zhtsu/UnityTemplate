@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FB_ReadLocaleFileEvent : FB_Event
+public class FB_Event_ReadLocaleFile : FB_Event
 {
-    public FB_ReadLocaleFileEvent(string InNamespace, string InLocaleFilePath)
+    public FB_Event_ReadLocaleFile(string InNamespace, string InLocaleFilePath)
     {
         Namespace = InNamespace;
         LocaleFilePath = InLocaleFilePath;

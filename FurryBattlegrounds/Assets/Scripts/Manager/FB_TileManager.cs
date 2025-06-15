@@ -14,12 +14,12 @@ public class FB_TileManager : FB_IManager
 
     public void Initialize()
     {
-        FB_EventManager.Subscribe<FB_ReadTileFileEvent>(LoadTileData);
+        FB_EventManager.Subscribe<FB_Event_ReadTileFile>(LoadTileData);
     }
 
     public void Destroy()
     {
-        FB_EventManager.Unsubscribe<FB_ReadTileFileEvent>(LoadTileData);
+        FB_EventManager.Unsubscribe<FB_Event_ReadTileFile>(LoadTileData);
     }
 
     public FB_TileData[] GetTileDataList(string ModId)
@@ -38,7 +38,7 @@ public class FB_TileManager : FB_IManager
         return GetTileData(ModId, TileId) != null;
     }
 
-    private void LoadTileData(FB_ReadTileFileEvent Event)
+    private void LoadTileData(FB_Event_ReadTileFile Event)
     {
         if (!File.Exists(Event.TileFilePath))
         {

@@ -59,7 +59,7 @@ public class FB_PrefabManager : FB_IManager
 
             if (_PrefabHandleList.Count == _PrefabAddressList.Length)
             {
-                FB_EventManager.SendEvent<FB_PrefabsLoadCompleted>();
+                FB_EventManager.SendEvent<FB_Event_PrefabsLoadCompleted>();
             }
         }
     }
