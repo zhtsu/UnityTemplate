@@ -1,23 +1,22 @@
 using System;
 using UnityEngine;
 
-public class FB_UIManager : MonoBehaviour
+public class FB_UIManager : FB_IManager
 {
-    [SerializeField]
-    private GameObject BottomLayer;
-    [SerializeField]
-    private GameObject MainLayer;
-    [SerializeField]
-    private GameObject TopLayer;
-    [SerializeField]
-    private GameObject PopupLayer;
-
-    private void Start()
+    public string ManagerName
     {
-        DontDestroyOnLoad(this);
+        get { return "UIManager"; }
     }
 
-    private void OnDestroy()
+    private FB_UIRoot _UIRoot;
+
+    public void Initialize()
     {
+        _UIRoot = GameObject.FindObjectOfType<FB_UIRoot>();
+    }
+
+    public void Destroy()
+    {
+
     }
 }
