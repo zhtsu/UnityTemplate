@@ -24,9 +24,4 @@ public class UT_SpawnService : MonoBehaviour, UT_ISpawnService
 
         return Instantiate(Prefab);
     }
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(this);
-    }
 }
