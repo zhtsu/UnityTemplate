@@ -6,14 +6,15 @@ public class UT_UIManager : UT_Manager
 {
     override public string ManagerName => "UI Manager";
 
-    private UT_IUIContext _UIContext;
+    private UT_UIRoot _UIRoot;
     private UT_ISpawnService _SpawnService;
 
     private List<GameObject> _ActiveUIList = new List<GameObject>();
 
-    public UT_UIManager(UT_IUIContext InUIContext)
+    public UT_UIManager(UT_UIRoot InUIRoot, UT_ISpawnService InSpawnService)
     {
-        _UIContext = InUIContext;
+        _UIRoot = InUIRoot;
+        _SpawnService = InSpawnService;
     }
 
     override public void Initialize()
@@ -28,7 +29,7 @@ public class UT_UIManager : UT_Manager
 
     public void OpenScreenUI(UT_EScreenUIType TargetUIType, UT_UIParams Params, UT_EUILayer Layer)
     {
-        if (_UIContext == null)
+        if (_UIRoot == null)
             return;
         if (_SpawnService == null)
             return;
@@ -42,7 +43,7 @@ public class UT_UIManager : UT_Manager
         RectTransform Rect = TargetUI.GetComponent<RectTransform>();
         SetFullStretch(Rect);
 
-        Transform LayerTransform = _UIContext.GetLayerObject(Layer).transform;
+        Transform LayerTransform = _UIRoot.GetLayerObject(Layer).transform;
         TargetUI.transform.SetParent(LayerTransform, false);
 
         _ActiveUIList.Add(TargetUI);

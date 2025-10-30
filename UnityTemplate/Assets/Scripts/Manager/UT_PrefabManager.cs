@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
 
-public class UT_PrefabManager : UT_Manager, UT_IPrefabService
+public class UT_PrefabManager : UT_Manager
 {
     override public string ManagerName => "Prefab Manager";
 

@@ -32,30 +32,6 @@ public class UT_GameController : MonoBehaviour
 
     private void Start()
     {
-        if (_GameConfig == null)
-        {
-            Debug.LogWarning("Invalid GameConfig!");
-            return;
-        }
-
-        if (_GameConfig.MainCameraPrefab == null)
-        {
-            Debug.LogWarning("Invalid Camera Prefab!");
-            return;
-        }
-
-        if (_GameConfig.UIRootPrefab == null)
-        {
-            Debug.LogWarning("Invalid UIRoot Prefab!");
-            return;
-        }
-
-        if (_GameConfig.AudioRootPrefab == null)
-        {
-            Debug.LogWarning("Invalid AudioRoot Prefab!");
-            return;
-        }
-
         if (_GameConfig.ServiceContainerPrefab == null)
         {
             Debug.LogWarning("Invalid ServiceContainer Prefab!");
@@ -63,13 +39,10 @@ public class UT_GameController : MonoBehaviour
         }
 
         Camera MainCamera = Instantiate(_GameConfig.MainCameraPrefab).GetComponent<Camera>();
-        UT_UIRoot UIRoot = Instantiate(_GameConfig.UIRootPrefab).GetComponent<UT_UIRoot>();
-        UT_AudioRoot AudioRoot = Instantiate(_GameConfig.AudioRootPrefab).GetComponent<UT_AudioRoot>();
 
         _ServiceContainer = Instantiate(_GameConfig.ServiceContainerPrefab).GetComponent<UT_ServiceContainer>();
         UT_FServiceContainerInitParams Params = new();
-        Params.UIRoot = UIRoot;
-        Params.AudioRoot = AudioRoot;
+        Params.GameConfig = _GameConfig;
         Params.PrefabConfig = _PrefabConfig;
         _ServiceContainer.Initialize(Params);
     }

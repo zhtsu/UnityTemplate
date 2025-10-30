@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UT_UIRoot : MonoBehaviour, UT_IUIContext
+public class UT_UIRoot : MonoBehaviour
 {
     [SerializeField] public GameObject BottomLayer;
     [SerializeField] public GameObject MainLayer;

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-public class UT_EventManager : UT_Manager, UT_IEventService
+public class UT_EventManager : UT_Manager
 {
     override public string ManagerName => "Event Manager";
 

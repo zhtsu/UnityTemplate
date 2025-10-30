@@ -6,16 +6,16 @@ using UnityEngine;
 
 public class UT_SpawnService : MonoBehaviour, UT_ISpawnService
 {
-    private UT_IPrefabService _PrefabService;
+    private UT_PrefabManager _PrefabManager;
 
-    public UT_SpawnService(UT_IPrefabService InPrefabService)
+    public UT_SpawnService(UT_PrefabManager InPrefabManager)
     {
-        _PrefabService = InPrefabService;
+        _PrefabManager = InPrefabManager;
     }
 
     public GameObject CreateGameObject(string PrefabAddress)
     {
-        GameObject Prefab = _PrefabService.GetPrefab(PrefabAddress);
+        GameObject Prefab = _PrefabManager.GetPrefab(PrefabAddress);
         if (Prefab == null)
         {
             Debug.LogWarning($"Invalid prefab: {PrefabAddress}");
