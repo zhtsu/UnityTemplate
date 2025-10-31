@@ -38,12 +38,13 @@ public class UT_GameController : MonoBehaviour
             return;
         }
 
-        Camera MainCamera = Instantiate(_GameConfig.MainCameraPrefab).GetComponent<Camera>();
+        InstantiateAsync(_GameConfig.MainCameraPrefab);
 
         _ServiceContainer = Instantiate(_GameConfig.ServiceContainerPrefab).GetComponent<UT_ServiceContainer>();
         UT_FServiceContainerInitParams Params = new();
         Params.GameConfig = _GameConfig;
         Params.PrefabConfig = _PrefabConfig;
+        Params.UIConfig = _UIConfig;
         _ServiceContainer.Initialize(Params);
     }
 

@@ -4,6 +4,7 @@ public struct UT_FServiceContainerInitParams
 {
     public UT_SO_GameConfig GameConfig;
     public UT_SO_PrefabConfig PrefabConfig;
+    public UT_SO_UIConfig UIConfig;
 }
 
 public class UT_ServiceContainer : MonoBehaviour
@@ -52,6 +53,9 @@ public class UT_ServiceContainer : MonoBehaviour
         UT_UIRoot UIRoot = Instantiate(Params.GameConfig.UIRootPrefab);
         _UIManager = new UT_UIManager(UIRoot, _SpawnService);
         InitManager<UT_UIManager>(_UIManager);
+        // Show Loading Screen
+        UT_UI_LoadingScreen LoadingScreen = Instantiate(Params.UIConfig.LoadingScreenPrefab);
+        _UIManager.OpenLoadingScreen(LoadingScreen);
         _UIService = Instantiate(Params.GameConfig.UIService, transform);
         _UIService.Initialize(_UIManager);
 

@@ -27,14 +27,30 @@ public class UT_UIManager : UT_Manager
         _ActiveUIList.Clear();
     }
 
-    public void OpenScreenUI(UT_EScreenUIType TargetUIType, UT_UIParams Params, UT_EUILayer Layer)
+    public void OpenLoadingScreen(UT_UI_LoadingScreen LoadingScreen)
+    {
+        if (_UIRoot == null)
+            return;
+
+        LoadingScreen.OnOpen();
+
+        RectTransform Rect = LoadingScreen.GetComponent<RectTransform>();
+        SetFullStretch(Rect);
+
+        Transform LayerTransform = _UIRoot.GetLayerObject(UT_EUILayer.Top).transform;
+        LoadingScreen.transform.SetParent(LayerTransform, false);
+
+        _ActiveUIList.Add(LoadingScreen.gameObject);
+    }
+
+    public void OpenScreenUI(UT_EScreenUIType ScreenUIType, UT_EUILayer Layer, UT_UIParams Params)
     {
         if (_UIRoot == null)
             return;
         if (_SpawnService == null)
             return;
 
-        GameObject TargetUI = _SpawnService.CreateGameObject(GetUIPrefabAddress(TargetUIType));
+        GameObject TargetUI = _SpawnService.CreateGameObject(GetUIPrefabAddress(ScreenUIType));
 
         UT_ScreenUI UIComp = TargetUI.GetComponent<UT_ScreenUI>();
         UIComp.SetParams(Params);

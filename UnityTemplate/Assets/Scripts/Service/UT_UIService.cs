@@ -33,7 +33,7 @@ public class UT_UIService : MonoBehaviour, UT_IUIService
         throw new NotImplementedException();
     }
 
-    public void OpenScreenUI(UT_EScreenUIType ScreenUIType, UT_UIParams Params, UT_EUILayer Layer)
+    public void OpenScreenUI(UT_EScreenUIType ScreenUIType, UT_EUILayer Layer, UT_UIParams Params = null)
     {
         throw new NotImplementedException();
     }

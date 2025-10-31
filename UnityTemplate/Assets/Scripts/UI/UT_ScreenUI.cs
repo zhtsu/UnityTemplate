@@ -5,6 +5,7 @@ using UnityEngine;
 public enum UT_EScreenUIType
 {
     None,
+    LoadingScreen,
     MainMenu,
     Config,
 }
