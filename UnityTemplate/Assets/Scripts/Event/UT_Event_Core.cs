@@ -1,3 +1,3 @@
-public class M3_Event_PrefabsLoadCompleted : UT_Event
+public class UT_Event_PrefabsLoadCompleted : UT_Event
 {
 }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class UT_PrefabManager : UT_Manager
 {
-    override public string ManagerName => "Prefab Manager";
+    public override string ManagerName => "Prefab Manager";
 
     private UT_IEventService _EventService;
     private UT_SO_PrefabConfig _PrefabConfig;
@@ -18,7 +18,7 @@ public class UT_PrefabManager : UT_Manager
         _PrefabConfig = PrefabConfig;
     }
 
-    override public void Initialize()
+    public override void Initialize()
     {
         foreach (string Address in _PrefabConfig.PrefabAddressList)
         {
@@ -31,7 +31,7 @@ public class UT_PrefabManager : UT_Manager
         }
     }
 
-    override public void Destroy()
+    public override void Destroy()
     {
         foreach (AsyncOperationHandle<GameObject> Handle in _PrefabHandleDict.Values)
         {
@@ -65,7 +65,7 @@ public class UT_PrefabManager : UT_Manager
 
         if (IsAllCompleted)
         {
-            _EventService.SendEvent<M3_Event_PrefabsLoadCompleted>();
+            _EventService.Dispatch<UT_Event_PrefabsLoadCompleted>();
         }
     }
 }

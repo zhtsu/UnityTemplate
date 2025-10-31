@@ -1,76 +1,92 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 public class UT_EventManager : UT_Manager
 {
-    override public string ManagerName => "Event Manager";
+    public override string ManagerName => "Event Manager";
 
-    private readonly object _lock = new object();
-    private readonly Dictionary<Type, Delegate> _EventHandlers = new Dictionary<Type, Delegate>();
+    private readonly ConcurrentQueue<UT_Event> _EventQueue = new();
+    private readonly ConcurrentDictionary<Type, ConcurrentDictionary<Guid, UT_IEventHandler>> _HandlersDict = new();
 
-    override public void Initialize()
+    public override void Initialize()
     {
-        _EventHandlers.Clear();
+        _EventQueue.Clear();
+        _HandlersDict.Clear();
     }
 
-    override public void Destroy()
+    public override void Destroy()
     {
-        _EventHandlers.Clear();
+        _EventQueue.Clear();
+        _HandlersDict.Clear();
     }
 
-    public void SendEvent<T>(T Event = default)
-        where T : UT_Event
+    public void Update()
+    {
+        if (_EventQueue.Count == 0)
+            return;
+
+        if (_EventQueue.TryDequeue(out UT_Event Event))
+        {
+            Type EventType = Event.GetType();
+
+            if (_HandlersDict.TryGetValue(EventType, out ConcurrentDictionary<Guid, UT_IEventHandler> HandlerDict))
+            {
+                foreach (UT_IEventHandler Handler in HandlerDict.Values)
+                {
+                    Handler.Handle(Event);
+                }
+            }
+        }
+    }
+
+    public void Dispatch<T>(T Event) where T : UT_Event
+    {
+        _EventQueue.Enqueue(Event);
+    }
+
+    public void Subscribe<T>(Action<T> InAction) where T : UT_Event
     {
         Type EventType = typeof(T);
-        Delegate Handlers = null;
 
-        lock (_lock)
+        ConcurrentDictionary<Guid, UT_IEventHandler> HandlerDict = _HandlersDict.GetOrAdd(EventType, (Key) =>
         {
-            _EventHandlers.TryGetValue(EventType, out Handlers);
-        }
+            return new ConcurrentDictionary<Guid, UT_IEventHandler>();
+        });
 
-        if (Handlers is UT_IEventService.EventHandler<T> TypedHandler)
-        {
-            TypedHandler?.Invoke(Event);
-        }
+        UT_EventHandler<T> NewEventHandler = new UT_EventHandler<T>(InAction);
+        if (FoundHandler(HandlerDict.Values, NewEventHandler, out Guid Temp))
+            return;
+
+        HandlerDict.TryAdd(NewEventHandler.HandlerGuid, NewEventHandler);
     }
 
-    public void Subscribe<T>(UT_IEventService.EventHandler<T> Handler)
+    public void Unsubscribe<T>(Action<T> InAction) where T : UT_Event
     {
-        lock (_lock)
-        {
-            Type EventType = typeof(T);
+        Type EventType = typeof(T);
 
-            if (_EventHandlers.TryGetValue(EventType, out Delegate ExistingDelegate))
+        if (_HandlersDict.TryGetValue(EventType, out ConcurrentDictionary<Guid, UT_IEventHandler> HandlerDict))
+        {
+            UT_EventHandler<T> NewEventHandler = new UT_EventHandler<T>(InAction);
+            if (FoundHandler(HandlerDict.Values, NewEventHandler, out Guid FoundGuid))
             {
-                _EventHandlers[EventType] = Delegate.Combine(ExistingDelegate, Handler);
-            }
-            else
-            {
-                _EventHandlers[EventType] = Handler;
+                HandlerDict.TryRemove(FoundGuid, out UT_IEventHandler Temp);
             }
         }
     }
 
-    public void Unsubscribe<T>(UT_IEventService.EventHandler<T> Handler)
+    private bool FoundHandler(ICollection<UT_IEventHandler> HandlerCollection, UT_IEventHandler SearchedHandler, out Guid FoundGuid)
     {
-        lock (_lock)
+        foreach (UT_IEventHandler Handler in HandlerCollection)
         {
-            Type EventType = typeof(T);
-
-            if (_EventHandlers.TryGetValue(EventType, out Delegate ExistingDelegate))
+            if (Handler.Equals(SearchedHandler))
             {
-                Delegate NewDelegate = Delegate.Remove(ExistingDelegate, Handler);
-
-                if (NewDelegate == null)
-                {
-                    _EventHandlers.Remove(EventType);
-                }
-                else
-                {
-                    _EventHandlers[EventType] = NewDelegate;
-                }
+                FoundGuid = Handler.HandlerGuid;
+                return true;
             }
         }
+
+        FoundGuid = Guid.Empty;
+        return false;
     }
 }

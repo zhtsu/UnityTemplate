@@ -8,20 +8,22 @@ public class UT_EventService : MonoBehaviour, UT_IEventService
 {
     private UT_EventManager _EventManager;
 
-    public UT_EventService(UT_EventManager EventManager)
+    public void Initialize(UT_EventManager EventManager)
     {
         _EventManager = EventManager;
     }
 
-    public void SendEvent<T>(T Event = null) where T : UT_Event
+    public void Dispatch<T>(T Event = default) where T : UT_Event, new()
     {
         if (_EventManager == null)
             return;
 
-        _EventManager.SendEvent(Event);
+        T EventToDispatch = Event ?? new T();
+
+        _EventManager.Dispatch(EventToDispatch);
     }
 
-    public void Subscribe<T>(UT_IEventService.EventHandler<T> Handler)
+    public void Subscribe<T>(Action<T> Handler) where T : UT_Event
     {
         if (_EventManager == null)
             return;
@@ -29,7 +31,7 @@ public class UT_EventService : MonoBehaviour, UT_IEventService
         _EventManager.Subscribe(Handler);
     }
 
-    public void Unsubscribe<T>(UT_IEventService.EventHandler<T> Handler)
+    public void Unsubscribe<T>(Action<T> Handler) where T : UT_Event
     {
         if (_EventManager == null)
             return;

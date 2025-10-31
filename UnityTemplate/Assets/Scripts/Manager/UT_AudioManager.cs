@@ -1,14 +1,14 @@
 
 public class UT_AudioManager : UT_Manager
 {
-    override public string ManagerName => "Audio Manager";
+    public override string ManagerName => "Audio Manager";
 
-    override public void Destroy()
+    public override void Destroy()
     {
 
     }
 
-    override public void Initialize()
+    public override void Initialize()
     {
 
     }

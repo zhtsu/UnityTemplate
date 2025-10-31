@@ -14,11 +14,17 @@ public class UT_ServiceContainer : MonoBehaviour
     private UT_PrefabManager _PrefabManager = null;
     private UT_ScriptManager _ScriptManager = null;
 
-    public UT_EventManager EventManager { get { return _EventManager; } }
-    public UT_UIManager UIManager { get { return _UIManager; } }
-    public UT_AudioManager AudioManager { get { return _AudioManager; } }
-    public UT_PrefabManager PrefabManager { get { return _PrefabManager; } }
-    public UT_ScriptManager ScriptManager { get { return _ScriptManager; } }
+    private UT_EventService _EventService = null;
+    private UT_SpawnService _SpawnService = null;
+    private UT_UIService _UIService = null;
+
+    private void LateUpdate()
+    {
+        if (_EventManager != null)
+        {
+            _EventManager.Update();
+        }
+    }
 
     public void Initialize(UT_FServiceContainerInitParams Params)
     {
@@ -30,20 +36,30 @@ public class UT_ServiceContainer : MonoBehaviour
         if (!CheckObject<UT_SpawnService>(Params.GameConfig.SpawnService))   return;
         if (!CheckObject<UT_UIService>(Params.GameConfig.UIService))         return;
 
-        UT_UIRoot UIRoot = Instantiate(Params.GameConfig.UIRootPrefab);
         UT_AudioRoot AudioRoot = Instantiate(Params.GameConfig.AudioRootPrefab);
 
-        UT_EventService EventService = Instantiate(Params.GameConfig.EventService, transform);
-        UT_SpawnService SpawnService = Instantiate(Params.GameConfig.SpawnService, transform);
-        UT_UIService UIService = Instantiate(Params.GameConfig.UIService, transform);
-
+        // Event Service
         _EventManager = new UT_EventManager();
-        _PrefabManager = new UT_PrefabManager(EventService, Params.PrefabConfig);
-        _UIManager = new UT_UIManager(UIRoot, SpawnService);
-
         InitManager<UT_EventManager>(_EventManager);
+        _EventService = Instantiate(Params.GameConfig.EventService, transform);
+        _EventService.Initialize(_EventManager);
+        // Prefab Service
+        _PrefabManager = new UT_PrefabManager(_EventService, Params.PrefabConfig);
         InitManager<UT_PrefabManager>(_PrefabManager);
+        _SpawnService = Instantiate(Params.GameConfig.SpawnService, transform);
+        _SpawnService.Initialize(_PrefabManager);
+        // UI Service
+        UT_UIRoot UIRoot = Instantiate(Params.GameConfig.UIRootPrefab);
+        _UIManager = new UT_UIManager(UIRoot, _SpawnService);
         InitManager<UT_UIManager>(_UIManager);
+        _UIService = Instantiate(Params.GameConfig.UIService, transform);
+        _UIService.Initialize(_UIManager);
+
+        _EventService.Subscribe<UT_Event_PrefabsLoadCompleted>((Event) => {
+            Debug.Log("测试事件系统");
+        });
+
+        _EventService.Dispatch<UT_Event_PrefabsLoadCompleted>();
     }
 
     public void Destroy()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UT_UIManager : UT_Manager
 {
-    override public string ManagerName => "UI Manager";
+    public override string ManagerName => "UI Manager";
 
     private UT_UIRoot _UIRoot;
     private UT_ISpawnService _SpawnService;
@@ -17,12 +17,12 @@ public class UT_UIManager : UT_Manager
         _SpawnService = InSpawnService;
     }
 
-    override public void Initialize()
+    public override void Initialize()
     {
         _ActiveUIList.Clear();
     }
 
-    override public void Destroy()
+    public override void Destroy()
     {
         _ActiveUIList.Clear();
     }

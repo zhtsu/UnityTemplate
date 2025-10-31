@@ -8,6 +8,11 @@ public class UT_UIService : MonoBehaviour, UT_IUIService
 {
     private UT_UIManager _UIManager;
 
+    public void Initialize(UT_UIManager InUIManager)
+    {
+        _UIManager = InUIManager;
+    }
+
     public void CloseAllScreenUI()
     {
         throw new NotImplementedException();

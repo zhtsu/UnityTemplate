@@ -8,7 +8,7 @@ public class UT_SpawnService : MonoBehaviour, UT_ISpawnService
 {
     private UT_PrefabManager _PrefabManager;
 
-    public UT_SpawnService(UT_PrefabManager InPrefabManager)
+    public void Initialize(UT_PrefabManager InPrefabManager)
     {
         _PrefabManager = InPrefabManager;
     }

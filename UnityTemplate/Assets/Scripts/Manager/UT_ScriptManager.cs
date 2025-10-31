@@ -4,16 +4,16 @@ using XLua;
 
 public class UT_ScriptManager : UT_Manager
 {
-    override public string ManagerName => "Script Manager";
+    public override string ManagerName => "Script Manager";
 
     private XLua.LuaEnv _LuaEnv { get; set; }
 
-    override public void Initialize()
+    public override void Initialize()
     {
         _LuaEnv = new XLua.LuaEnv();
     }
 
-    override public void Destroy()
+    public override void Destroy()
     {
         _LuaEnv.Dispose();
     }
