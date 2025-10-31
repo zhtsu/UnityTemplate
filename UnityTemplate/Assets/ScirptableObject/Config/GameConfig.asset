@@ -1,19 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2023e55e4c7554541984bfa5d5f3ab4b, type: 3}
-  m_Name: GameConfig
-  m_EditorClassIdentifier: 
-  UIRootPrefab: {fileID: 4893907025736607722, guid: 1ea6df399b9016d4c8e2468e03d01332, type: 3}
-  MainCameraPrefab: {fileID: 381222238061329322, guid: c0ce0925fa478de419a73eaf5482f344, type: 3}
-  ServiceContainerPrefab: {fileID: 4493773394380219477, guid: 5176b18b2e3702c47845daedbfe82136, type: 3}
-  AudioRootPrefab: {fileID: 8075304873979315016, guid: 235c9691028974e499ccc37dc2d6f82f, type: 3}
-  MouseDragThreshold: 5
+version https://git-lfs.github.com/spec/v1
+oid sha256:9531bb4176c736e25d86a5c8acb1183ead8d45bb1bcf3bffb13507df346432f2
+size 819
