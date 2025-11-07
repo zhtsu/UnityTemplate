@@ -27,20 +27,20 @@ public class UT_UIManager : UT_Manager
         _ActiveUIList.Clear();
     }
 
-    public void OpenLoadingScreen(UT_UI_LoadingScreen LoadingScreen)
+    public void OpenScreenUI(UT_ScreenUI ScreenUI, UT_EUILayer Layer, UT_UIParams Params)
     {
         if (_UIRoot == null)
             return;
 
-        LoadingScreen.OnOpen();
+        ScreenUI.OnOpen();
 
-        RectTransform Rect = LoadingScreen.GetComponent<RectTransform>();
+        RectTransform Rect = ScreenUI.GetComponent<RectTransform>();
         SetFullStretch(Rect);
 
-        Transform LayerTransform = _UIRoot.GetLayerObject(UT_EUILayer.Top).transform;
-        LoadingScreen.transform.SetParent(LayerTransform, false);
+        Transform LayerTransform = _UIRoot.GetLayerObject(Layer).transform;
+        ScreenUI.transform.SetParent(LayerTransform, false);
 
-        _ActiveUIList.Add(LoadingScreen.gameObject);
+        _ActiveUIList.Add(ScreenUI.gameObject);
     }
 
     public void OpenScreenUI(UT_EScreenUIType ScreenUIType, UT_EUILayer Layer, UT_UIParams Params)
@@ -71,6 +71,21 @@ public class UT_UIManager : UT_Manager
         {
             UT_ScreenUI UIComp = Obj.GetComponent<UT_ScreenUI>();
             if (UIComp != null && UIComp.Type == TargetUIType)
+            {
+                _ActiveUIList.Remove(Obj);
+                UIComp.OnClose();
+                UIComp.DestroySelf();
+                break;
+            }
+        }
+    }
+
+    public void CloseScreenUI(UT_ScreenUI ScreenUI)
+    {
+        foreach (GameObject Obj in _ActiveUIList)
+        {
+            UT_ScreenUI UIComp = Obj.GetComponent<UT_ScreenUI>();
+            if (UIComp == ScreenUI)
             {
                 _ActiveUIList.Remove(Obj);
                 UIComp.OnClose();

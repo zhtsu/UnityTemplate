@@ -10,12 +10,15 @@ public struct UT_FServiceContainerInitParams
 public class UT_ServiceContainer : MonoBehaviour
 {
     private UT_EventManager _EventManager = null;
+    private UT_CommandManager _CommandManager = null;
     private UT_UIManager _UIManager = null;
     private UT_AudioManager _AudioManager = null;
     private UT_PrefabManager _PrefabManager = null;
     private UT_ScriptManager _ScriptManager = null;
 
     private UT_EventService _EventService = null;
+    private UT_CommandService _CommandService = null;
+    private UT_CoroutineService _CoroutineService = null;
     private UT_SpawnService _SpawnService = null;
     private UT_UIService _UIService = null;
 
@@ -29,41 +32,43 @@ public class UT_ServiceContainer : MonoBehaviour
 
     public void Initialize(UT_FServiceContainerInitParams Params)
     {
-        if (!CheckObject<UT_SO_GameConfig>(Params.GameConfig))               return;
-        if (!CheckObject<Camera>(Params.GameConfig.MainCameraPrefab))        return;
-        if (!CheckObject<UT_UIRoot>(Params.GameConfig.UIRootPrefab))         return;
-        if (!CheckObject<UT_AudioRoot>(Params.GameConfig.AudioRootPrefab))   return;
-        if (!CheckObject<UT_EventService>(Params.GameConfig.EventService))   return;
-        if (!CheckObject<UT_SpawnService>(Params.GameConfig.SpawnService))   return;
-        if (!CheckObject<UT_UIService>(Params.GameConfig.UIService))         return;
+        if (!CheckObject<UT_SO_GameConfig>(Params.GameConfig)) return;
+        if (!CheckObject<Camera>(Params.GameConfig.MainCameraPrefab)) return;
+        if (!CheckObject<UT_UIRoot>(Params.GameConfig.UIRootPrefab)) return;
+        if (!CheckObject<UT_AudioRoot>(Params.GameConfig.AudioRootPrefab)) return;
 
+        // Services
+        _EventService = GetComponent<UT_EventService>();
+        _CoroutineService = GetComponent<UT_CoroutineService>();
+        _CommandService = GetComponent<UT_CommandService>();
+        _SpawnService = GetComponent<UT_SpawnService>();
+        _UIService = GetComponent<UT_UIService>();
+
+        // Managers
+        UT_UIRoot UIRoot = Instantiate(Params.GameConfig.UIRootPrefab);
         UT_AudioRoot AudioRoot = Instantiate(Params.GameConfig.AudioRootPrefab);
 
-        // Event Service
-        _EventManager = new UT_EventManager();
-        InitManager<UT_EventManager>(_EventManager);
-        _EventService = Instantiate(Params.GameConfig.EventService, transform);
-        _EventService.Initialize(_EventManager);
-        // Prefab Service
-        _PrefabManager = new UT_PrefabManager(_EventService, Params.PrefabConfig);
-        InitManager<UT_PrefabManager>(_PrefabManager);
-        _SpawnService = Instantiate(Params.GameConfig.SpawnService, transform);
-        _SpawnService.Initialize(_PrefabManager);
-        // UI Service
-        UT_UIRoot UIRoot = Instantiate(Params.GameConfig.UIRootPrefab);
         _UIManager = new UT_UIManager(UIRoot, _SpawnService);
-        InitManager<UT_UIManager>(_UIManager);
+        _AudioManager = new UT_AudioManager(AudioRoot);
+        _EventManager = new UT_EventManager();
+        _CommandManager = new UT_CommandManager(_CoroutineService);
+        _PrefabManager = new UT_PrefabManager(_EventService, Params.PrefabConfig);
+
         // Show Loading Screen
         UT_UI_LoadingScreen LoadingScreen = Instantiate(Params.UIConfig.LoadingScreenPrefab);
-        _UIManager.OpenLoadingScreen(LoadingScreen);
-        _UIService = Instantiate(Params.GameConfig.UIService, transform);
+        _UIManager.OpenScreenUI(LoadingScreen, UT_EUILayer.Top, null);
+
+        // Initialize Services
+        _SpawnService.Initialize(_PrefabManager);
+        _EventService.Initialize(_EventManager);
         _UIService.Initialize(_UIManager);
 
-        _EventService.Subscribe<UT_Event_PrefabsLoadCompleted>((Event) => {
-            Debug.Log("测试事件系统");
-        });
-
-        _EventService.Dispatch<UT_Event_PrefabsLoadCompleted>();
+        // Initialize Managers
+        InitManager<UT_EventManager>(_EventManager);
+        InitManager<UT_CommandManager>(_CommandManager);
+        InitManager<UT_PrefabManager>(_PrefabManager);
+        InitManager<UT_UIManager>(_UIManager);
+        InitManager<UT_AudioManager>(_AudioManager);
     }
 
     public void Destroy()
@@ -71,6 +76,8 @@ public class UT_ServiceContainer : MonoBehaviour
         DestroyManager<UT_UIManager>(_UIManager);
         DestroyManager<UT_EventManager>(_EventManager);
         DestroyManager<UT_PrefabManager>(_PrefabManager);
+        DestroyManager<UT_CommandManager>(_CommandManager);
+        DestroyManager<UT_AudioManager>(_AudioManager);
     }
 
     private void InitManager<T>(T Manager)
