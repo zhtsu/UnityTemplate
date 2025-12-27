@@ -18,40 +18,41 @@ public class UT_UIService : UT_Service, UT_IUIService
 
     private UT_SO_UIConfig _UIConfig;
     private UT_UIRoot _UIRoot;
+    private UT_IPrefabService _IPrefabService;
 
-    private Dictionary<string, UT_UIView> _CacheUIDict = new Dictionary<string, UT_UIView>();
+    private Dictionary<string, UT_UIView> _CachedUIDict = new Dictionary<string, UT_UIView>();
     private Stack<UT_UIView> _ActiveUIStack = new Stack<UT_UIView>();
 
-    public UT_UIService(UT_SO_UIConfig UIConfig)
+    public UT_UIService(UT_SO_UIConfig UIConfig, UT_IPrefabService IPrefabService)
     {
         _UIConfig = UIConfig;
+        _IPrefabService = IPrefabService;
     }
 
-    public override async UniTask Initialize()
+    public override UniTask Initialize()
     {
-        _CacheUIDict.Clear();
+        _CachedUIDict.Clear();
         _ActiveUIStack.Clear();
 
         if (_UIConfig == null)
         {
             Debug.LogError("UI config is null!");
-            return;
+            return UniTask.CompletedTask;
         }
 
-        var Results = await UnityEngine.Object.InstantiateAsync(_UIConfig.UIRootPrefab).ToUniTask();
-        if (Results.Length > 0)
-        {
-            _UIRoot = Results[0].GetComponent<UT_UIRoot>();
-            if (_UIRoot == null)
-            {
-                Debug.LogError("UI Root Component is missing in the prefab!");
-            }
-        }
+        _UIRoot = UnityEngine.Object.Instantiate(_UIConfig.UIRootPrefab)?.GetComponent<UT_UIRoot>();
+        return UniTask.CompletedTask;
     }
 
     public override void Destroy()
     {
-        _CacheUIDict.Clear();
+        foreach (var Pair in _CachedUIDict)
+        {
+            if (Pair.Value != null)
+                GameObject.Destroy(Pair.Value.gameObject);
+        }
+
+        _CachedUIDict.Clear();
         _ActiveUIStack.Clear();
     }
 
@@ -60,44 +61,44 @@ public class UT_UIService : UT_Service, UT_IUIService
         if (_UIRoot == null)
             return;
 
+        if (_ActiveUIStack.Count > 0 && _ActiveUIStack.Peek().TypeKey == UITypeKey)
+            return;
+
         UT_SO_UIDescriptor UIDesc = GetUIDesc(UITypeKey);
         if (UIDesc == null)
             return;
 
-        if (_CacheUIDict.TryGetValue(UITypeKey, out UT_UIView CachedUI))
+        if (_CachedUIDict.TryGetValue(UITypeKey, out UT_UIView CachedUI))
         {
             OpenUI_Internal(CachedUI, Params, UIDesc);
             return;
         }
 
-        Addressables.LoadAssetAsync<GameObject>(UIDesc.PrefabAddress).Completed +=
-        (Handle) =>
+        GameObject Prefab = _IPrefabService.GetPrefab(UIDesc.PrefabAddress);
+        if (Prefab == null)
         {
-            if (Handle.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
-            {
-                GameObject Prefab = Handle.Result;
-                GameObject UIObj = GameObject.Instantiate(Prefab);
-                UT_UIView UIComp = UIObj.GetComponent<UT_UIView>();
-                if (UIComp != null)
-                {
-                    _CacheUIDict.Add(UITypeKey, UIComp);
-                    OpenUI_Internal(UIComp, Params, UIDesc);
-                }
-                else
-                {
-                    Debug.LogError($"UI Component is missing in prefab for UI type {UITypeKey}!");
-                    GameObject.Destroy(UIObj);
-                }
-            }
-            else
-            {
-                Debug.LogError($"Failed to load UI prefab for type {UITypeKey} from address {UIDesc.PrefabAddress}!");
-            }
-        };
+            Debug.LogError($"Failed to load prefab for UI type {UITypeKey}!");
+            return;
+        }
+        GameObject UIObj = GameObject.Instantiate(Prefab);
+        UT_UIView UIComp = UIObj.GetComponent<UT_UIView>();
+        if (UIComp != null)
+        {
+            _CachedUIDict.Add(UITypeKey, UIComp);
+            OpenUI_Internal(UIComp, Params, UIDesc);
+        }
+        else
+        {
+            Debug.LogError($"UI Component is missing in prefab for UI type {UITypeKey}!");
+            GameObject.Destroy(UIObj);
+        }
     }
 
     private void OpenUI_Internal(UT_UIView UI, UT_UIParams Params, UT_SO_UIDescriptor UIDesc)
     {
+        if (_ActiveUIStack.Count > 0)
+            _ActiveUIStack.Peek().OnPause();
+
         UI.Initialize(Params);
         UI.OnOpen();
 
@@ -111,24 +112,24 @@ public class UT_UIService : UT_Service, UT_IUIService
         _ActiveUIStack.Push(UI);
     }
 
-    public void CloseUI(string UITypeKey)
+    public void Back()
     {
         if (_ActiveUIStack.Count == 0)
             return;
 
         UT_UIView TopUI = _ActiveUIStack.Peek();
 
-        if (TopUI.TypeKey != UITypeKey)
-            return;
-
         TopUI.OnClose();
         TopUI.transform.SetParent(null);
         TopUI.enabled = false;
 
         _ActiveUIStack.Pop();
+
+        if (_ActiveUIStack.Count > 0)
+            _ActiveUIStack.Peek().OnResume();
     }
 
-    public void CloseAllUI()
+    public void Close()
     {
         while (_ActiveUIStack.Count > 0)
         {

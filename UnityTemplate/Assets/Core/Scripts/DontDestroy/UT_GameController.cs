@@ -18,17 +18,7 @@ public class UT_GameController : MonoBehaviour
     private async void Start()
     {
         Instantiate(_GameConfig.MainCameraPrefab);
-
-        UT_UI_LoadingScreen LoadingScreen = null;
-        var Results_LSP = await InstantiateAsync(_UIConfig.LoadingScreenPrefab).ToUniTask();
-        if (Results_LSP.Length > 0)
-        {
-            LoadingScreen = Results_LSP[0].GetComponent<UT_UI_LoadingScreen>();
-            if (LoadingScreen == null)
-            {
-                Debug.LogError("LoadingScreen Component is missing in the prefab!");
-            }
-        }
+        GameObject LoadingScreen = Instantiate(_UIConfig.LoadingScreenPrefab);
 
         UT_FServiceContainerInitParams Params = new();
         Params.GameConfig = _GameConfig;
@@ -49,8 +39,8 @@ public class UT_GameController : MonoBehaviour
         if (_ServiceContainer != null)
             await _ServiceContainer.Initialize(Params);
 
-
-        Destroy(LoadingScreen.gameObject);
+        if (LoadingScreen != null)
+            Destroy(LoadingScreen);
     }
 
     private void OnDestroy()

@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 
 public struct UT_FServiceContainerInitParams
@@ -27,27 +26,34 @@ public class UT_ServiceContainer : MonoBehaviour
 
     public async UniTask Initialize(UT_FServiceContainerInitParams Params)
     {
-        // Create Services
-        _EventService = new UT_EventService();
-        _CommandService = new UT_CommandService();
+        // Create and initialize services
         _PrefabService = new UT_PrefabService(Params.PrefabConfig);
-        _UIService = new UT_UIService(Params.UIConfig);
-        _GameStateService = new UT_GameStateService();
-        _AudioService = new UT_AudioService(Params.AudioConfig);
-
-        // Initialize Services
-        _ = _EventService.Initialize();
-        _ = _CommandService.Initialize();
-        _ = _GameStateService.Initialize();
-        await _UIService.Initialize();
         await _PrefabService.Initialize();
-        await _AudioService.Initialize();
 
-        // Initialize Managers
+        _UIService = new UT_UIService(Params.UIConfig, _PrefabService);
+        _ = _UIService.Initialize();
+
+        _EventService = new UT_EventService();
+        _ = _EventService.Initialize();
+
+        _CommandService = new UT_CommandService();
+        _ = _CommandService.Initialize();
+
+        _GameStateService = new UT_GameStateService();
+        _ = _GameStateService.Initialize();
+
+        _AudioService = new UT_AudioService(Params.AudioConfig);
+        _ = _AudioService.Initialize();
     }
 
     public void Destroy()
     {
+        _EventService?.Destroy();
+        _CommandService?.Destroy();
+        _GameStateService?.Destroy();
+        _UIService?.Destroy();
+        _PrefabService?.Destroy();
+        _AudioService?.Destroy();
     }
 
     private void Awake()

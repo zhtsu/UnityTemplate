@@ -53,16 +53,4 @@ public class UT_PrefabService : UT_Service, UT_IPrefabService
 
         return null;
     }
-
-    public GameObject CreateGameObject(string PrefabAddress)
-    {
-        GameObject Prefab = GetPrefab(PrefabAddress);
-        if (Prefab == null)
-        {
-            Debug.LogWarning($"Invalid prefab: {PrefabAddress}");
-            return null;
-        }
-
-        return UnityEngine.Object.Instantiate(Prefab);
-    }
 }

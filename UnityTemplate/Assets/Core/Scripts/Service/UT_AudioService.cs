@@ -18,22 +18,15 @@ public class UT_AudioService : UT_Service, UT_IAudioService
 
     }
 
-    public override async UniTask Initialize()
+    public override UniTask Initialize()
     {
         if (_AudioConfig.AudioRootPrefab == null)
         {
             Debug.LogError("Audio Root Prefab is null!");
-            return;
+            return UniTask.CompletedTask;
         }
-
-        var Results = await UnityEngine.Object.InstantiateAsync(_AudioConfig.AudioRootPrefab).ToUniTask();
-        if (Results.Length > 0)
-        {
-            _AudioRoot = Results[0].GetComponent<UT_AudioRoot>();
-            if (_AudioRoot == null)
-            {
-                Debug.LogError("Audio Root Component is missing in the prefab!");
-            }
-        }
+        
+        _AudioRoot = UnityEngine.Object.Instantiate(_AudioConfig.AudioRootPrefab)?.GetComponent<UT_AudioRoot>();
+        return UniTask.CompletedTask;
     }
 }
