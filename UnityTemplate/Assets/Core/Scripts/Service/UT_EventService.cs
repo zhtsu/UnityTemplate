@@ -1,41 +1,95 @@
+using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using UnityEngine;
 
-
-
-public class UT_EventService : MonoBehaviour, UT_IEventService
+public class UT_EventService : UT_Service, UT_IEventService
 {
-    private UT_EventManager _EventManager;
+    public override string ServiceName => "Event Service";
 
-    public void Initialize(UT_EventManager EventManager)
+    private readonly ConcurrentQueue<UT_Event> _EventQueue = new();
+    private readonly ConcurrentDictionary<Type, ConcurrentDictionary<Guid, UT_IEventHandler>> _HandlersDict = new();
+
+    public override UniTask Initialize()
     {
-        _EventManager = EventManager;
+        _EventQueue.Clear();
+        _HandlersDict.Clear();
+
+        return UniTask.CompletedTask;
+    }
+
+    public override void Destroy()
+    {
+        _EventQueue.Clear();
+        _HandlersDict.Clear();
+    }
+
+    public void Update()
+    {
+        if (_EventQueue.Count == 0)
+            return;
+
+        if (_EventQueue.TryDequeue(out UT_Event Event))
+        {
+            Type EventType = Event.GetType();
+
+            if (_HandlersDict.TryGetValue(EventType, out ConcurrentDictionary<Guid, UT_IEventHandler> HandlerDict))
+            {
+                foreach (UT_IEventHandler Handler in HandlerDict.Values)
+                {
+                    Handler.Handle(Event);
+                }
+            }
+        }
     }
 
     public void Dispatch<T>(T Event = default) where T : UT_Event, new()
     {
-        if (_EventManager == null)
-            return;
-
-        T EventToDispatch = Event ?? new T();
-
-        _EventManager.Dispatch(EventToDispatch);
+        _EventQueue.Enqueue(Event);
     }
 
-    public void Subscribe<T>(Action<T> Handler) where T : UT_Event
+    public void Subscribe<T>(Action<T> InAction) where T : UT_Event
     {
-        if (_EventManager == null)
+        Type EventType = typeof(T);
+
+        ConcurrentDictionary<Guid, UT_IEventHandler> HandlerDict = _HandlersDict.GetOrAdd(EventType, (Key) =>
+        {
+            return new ConcurrentDictionary<Guid, UT_IEventHandler>();
+        });
+
+        UT_EventHandler<T> NewEventHandler = new UT_EventHandler<T>(InAction);
+        if (FoundHandler(HandlerDict.Values, NewEventHandler, out Guid Temp))
             return;
 
-        _EventManager.Subscribe(Handler);
+        HandlerDict.TryAdd(NewEventHandler.HandlerGuid, NewEventHandler);
     }
 
-    public void Unsubscribe<T>(Action<T> Handler) where T : UT_Event
+    public void Unsubscribe<T>(Action<T> InAction) where T : UT_Event
     {
-        if (_EventManager == null)
-            return;
+        Type EventType = typeof(T);
 
-        _EventManager.Unsubscribe(Handler);
+        if (_HandlersDict.TryGetValue(EventType, out ConcurrentDictionary<Guid, UT_IEventHandler> HandlerDict))
+        {
+            UT_EventHandler<T> NewEventHandler = new UT_EventHandler<T>(InAction);
+            if (FoundHandler(HandlerDict.Values, NewEventHandler, out Guid FoundGuid))
+            {
+                HandlerDict.TryRemove(FoundGuid, out UT_IEventHandler Temp);
+            }
+        }
+    }
+
+    private bool FoundHandler(ICollection<UT_IEventHandler> HandlerCollection, UT_IEventHandler SearchedHandler, out Guid FoundGuid)
+    {
+        foreach (UT_IEventHandler Handler in HandlerCollection)
+        {
+            if (Handler.Equals(SearchedHandler))
+            {
+                FoundGuid = Handler.HandlerGuid;
+                return true;
+            }
+        }
+
+        FoundGuid = Guid.Empty;
+        return false;
     }
 }

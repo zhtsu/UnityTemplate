@@ -1,7 +1,7 @@
-using System.Collections;
+using Cysharp.Threading.Tasks;
 
 public abstract class UT_Command
 {
     public string GetString() { return "Command"; }
-    public abstract IEnumerator Execute();
+    public abstract UniTask Execute();
 }

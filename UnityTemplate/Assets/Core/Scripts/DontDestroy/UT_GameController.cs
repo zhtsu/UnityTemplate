@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class UT_GameController : MonoBehaviour
@@ -14,34 +15,47 @@ public class UT_GameController : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    public static bool IsGameReady()
+    private async void Start()
     {
-        return false;
-    }
+        Instantiate(_GameConfig.MainCameraPrefab);
 
-    private void Start()
-    {
-        if (_GameConfig.ServiceContainerPrefab == null)
+        UT_UI_LoadingScreen LoadingScreen = null;
+        var Results_LSP = await InstantiateAsync(_UIConfig.LoadingScreenPrefab).ToUniTask();
+        if (Results_LSP.Length > 0)
         {
-            Debug.LogWarning("Invalid ServiceContainer Prefab!");
-            return;
+            LoadingScreen = Results_LSP[0].GetComponent<UT_UI_LoadingScreen>();
+            if (LoadingScreen == null)
+            {
+                Debug.LogError("LoadingScreen Component is missing in the prefab!");
+            }
         }
 
-        InstantiateAsync(_GameConfig.MainCameraPrefab);
-
-        _ServiceContainer = Instantiate(_GameConfig.ServiceContainerPrefab).GetComponent<UT_ServiceContainer>();
         UT_FServiceContainerInitParams Params = new();
         Params.GameConfig = _GameConfig;
         Params.PrefabConfig = _PrefabConfig;
         Params.UIConfig = _UIConfig;
-        _ServiceContainer.Initialize(Params);
+        Params.AudioConfig = _AudioConfig;
+
+        var Results_SCP = await InstantiateAsync(_GameConfig.ServiceContainerPrefab).ToUniTask();
+        if (Results_SCP.Length > 0)
+        {
+            _ServiceContainer = Results_SCP[0].GetComponent<UT_ServiceContainer>();
+            if (_ServiceContainer == null)
+            {
+                Debug.LogError("ServiceContainer Component is missing in the prefab!");
+            }
+        }
+
+        if (_ServiceContainer != null)
+            await _ServiceContainer.Initialize(Params);
+
+
+        Destroy(LoadingScreen.gameObject);
     }
 
     private void OnDestroy()
     {
         if (_ServiceContainer != null)
-        {
             _ServiceContainer.Destroy();
-        }
     }
 }
