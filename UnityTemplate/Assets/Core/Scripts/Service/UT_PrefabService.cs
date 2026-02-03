@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.Video;
 
 public class UT_PrefabService : UT_Service, UT_IPrefabService
 {
     public override string ServiceName => "Prefab Service";
 
     private UT_SO_PrefabConfig _PrefabConfig;
-    private Dictionary<Hash128, AsyncOperationHandle<GameObject>> _PrefabHandleDict = new Dictionary<Hash128, AsyncOperationHandle<GameObject>>();
+    
+    private AsyncOperationHandle<IList<GameObject>> _PrefabListHandle;
+    private AsyncOperationHandle<IList<VideoClip>> _VideoListHandle;
+
+    private Dictionary<string, GameObject> _PrefabDict = new();
+    private Dictionary<string, VideoClip> _VideoDict = new();
 
     public UT_PrefabService(UT_SO_PrefabConfig PrefabConfig)
     {
@@ -20,15 +26,34 @@ public class UT_PrefabService : UT_Service, UT_IPrefabService
     {
         List<UniTask> LoadTasks = new List<UniTask>();
 
-        foreach (string Address in _PrefabConfig.PrefabAddressList)
+        if (string.IsNullOrEmpty(_PrefabConfig.UILabel) == false)
         {
-            if (string.IsNullOrEmpty(Address) == false)
-            {
-                AsyncOperationHandle<GameObject> Handle = Addressables.LoadAssetAsync<GameObject>(Address);
-                LoadTasks.Add(Handle.ToUniTask());
+            _PrefabListHandle = Addressables.LoadAssetsAsync<GameObject>(
+                _PrefabConfig.UILabel,
+                (Prefab) =>
+                {
+                    if (Prefab != null)
+                    {
+                        _PrefabDict[Prefab.name] = Prefab;
+                    }
+                });
 
-                _PrefabHandleDict.Add(Hash128.Compute(Address), Handle);
-            }
+            LoadTasks.Add(_PrefabListHandle.ToUniTask());
+        }
+
+        if (string.IsNullOrEmpty(_PrefabConfig.UILabel) == false)
+        {
+            _VideoListHandle = Addressables.LoadAssetsAsync<VideoClip>(
+                _PrefabConfig.VideoLabel,
+                (Video) =>
+                {
+                    if (Video != null)
+                    {
+                        _VideoDict[Video.name] = Video;
+                    }
+                });
+
+            LoadTasks.Add(_VideoListHandle.ToUniTask());
         }
 
         await UniTask.WhenAll(LoadTasks);
@@ -36,19 +61,34 @@ public class UT_PrefabService : UT_Service, UT_IPrefabService
 
     public override void Destroy()
     {
-        foreach (AsyncOperationHandle<GameObject> Handle in _PrefabHandleDict.Values)
+        if (_PrefabListHandle.IsValid())
         {
-            Addressables.Release(Handle);
+            Addressables.Release(_PrefabListHandle);
         }
+        _PrefabDict.Clear();
 
-        _PrefabHandleDict.Clear();
+        if (_VideoListHandle.IsValid())
+        {
+            Addressables.Release(_VideoListHandle);
+        }
+        _VideoDict.Clear();
     }
 
     public GameObject GetPrefab(string Address)
     {
-        if (_PrefabHandleDict.TryGetValue(Hash128.Compute(Address), out AsyncOperationHandle<GameObject> OutHandle))
+        if (_PrefabDict.TryGetValue(Address, out GameObject OutPrefab))
         {
-            return OutHandle.Result;
+            return OutPrefab;
+        }
+
+        return null;
+    }
+
+    public VideoClip GetVideo(string Address)
+    {
+        if (_VideoDict.TryGetValue(Address, out VideoClip OutVideo))
+        {
+            return OutVideo;
         }
 
         return null;
