@@ -1,4 +1,4 @@
-public interface UT_IServiceContainer
+public interface UT_IServiceLocator
 {
     TServiceInterface GetService<TServiceInterface>();
 }

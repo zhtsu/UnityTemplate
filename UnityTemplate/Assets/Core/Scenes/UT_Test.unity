@@ -122,7 +122,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &774422149
+--- !u!1001 &652615060
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5871730551745753033, guid: 016e5582e2776df44b3e9c1ffafbe9ff, type: 3}
       propertyPath: m_Name
-      value: GameController
+      value: GameManager
       objectReference: {fileID: 0}
     - target: {fileID: 7705464384348858479, guid: 016e5582e2776df44b3e9c1ffafbe9ff, type: 3}
       propertyPath: m_LocalPosition.x
@@ -183,4 +183,4 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 774422149}
+  - {fileID: 652615060}

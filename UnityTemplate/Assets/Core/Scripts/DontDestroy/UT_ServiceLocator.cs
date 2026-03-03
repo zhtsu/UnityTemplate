@@ -11,7 +11,7 @@ public struct UT_FServiceContainerInitParams
     public Camera MainCamera;
 }
 
-public class UT_ServiceContainer : MonoBehaviour, UT_IServiceContainer
+public class UT_ServiceLocator : MonoBehaviour, UT_IServiceLocator
 {
     private readonly Dictionary<System.Type, UT_Service> _ServiceDict = new();
 
@@ -86,7 +86,7 @@ public class UT_ServiceContainer : MonoBehaviour, UT_IServiceContainer
 
     private void Awake()
     {
-        gameObject.name = "ServiceContainer";
+        gameObject.name = "ServiceLocator";
         DontDestroyOnLoad(this);
     }
 }
